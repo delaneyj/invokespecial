@@ -171,6 +171,24 @@ func Many[T any](p ParserFunc[T]) ParserFunc[[]T] {
 	}
 }
 
+func AtLeastOne[T any](p ParserFunc[T]) ParserFunc[[]T] {
+	return func(ctx *ParseContext) ([]T, error) {
+		x, err := p(ctx)
+		if err != nil {
+			return nil, err
+		}
+		result := []T{x}
+		for {
+			x, err := p(ctx)
+			if err != nil {
+				break
+			}
+			result = append(result, x)
+		}
+		return result, nil
+	}
+}
+
 func Optional[T any](p ParserFunc[T]) ParserFunc[T] {
 	return func(ctx *ParseContext) (T, error) {
 		x, err := p(ctx)
