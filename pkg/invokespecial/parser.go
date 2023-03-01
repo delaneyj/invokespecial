@@ -19,23 +19,6 @@ func Parse[T any](parser ParserFunc[T], text string) (T, error) {
 	return r, nil
 }
 
-// <*> in the Haskell world
-func Seq[T any, U any](left ParserFunc[T], right ParserFunc[U]) ParserFunc[Pair[T, U]] {
-	return func(ctx *ParseContext) (Pair[T, U], error) {
-		l, err := left(ctx)
-		if err != nil {
-			var nilValue Pair[T, U]
-			return nilValue, fmt.Errorf("failed to parse left value in seq %w", err)
-		}
-		r, err := right(ctx)
-		if err != nil {
-			var nilValue Pair[T, U]
-			return nilValue, fmt.Errorf("failed to parse right value in seq %w", err)
-		}
-		return NewPair(l, r), nil
-	}
-}
-
 type ParseContext struct {
 	Text     string
 	Position int
