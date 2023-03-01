@@ -171,7 +171,7 @@ func Many[T any](p ParserFunc[T]) ParserFunc[[]T] {
 	}
 }
 
-func AtLeastOne[T any](p ParserFunc[T]) ParserFunc[[]T] {
+func Some[T any](p ParserFunc[T]) ParserFunc[[]T] {
 	return func(ctx *ParseContext) ([]T, error) {
 		x, err := p(ctx)
 		if err != nil {
